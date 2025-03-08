@@ -1,0 +1,15 @@
+div{
+    border-color: black;
+}
+.input-area{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    border-radius: 5%;
+}
+.messaging{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    
+}
