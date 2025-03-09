@@ -1,15 +1,82 @@
-div{
-    border-color: black;
+body{
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding:0;
+    display: flex;
+    align-items: center;
+    height: 100vh;
+}
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:20px;
+}
+h2{
+    margin-top: 0%;
+    padding-top: 0;
+    text-align: center;
+    color: #333;
 }
 .input-area{
     display: flex;
     justify-content: center;
     text-align: center;
     border-radius: 5%;
+    margin-bottom: 20px;
+}
+input{
+    padding:10px;
+    width:300px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
 }
 .messaging{
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    text-align: center;
-    
+    text-align: center; */
+    width: 400px;
+    height: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-top: 20px;
+    overflow-y: auto;
+}
+button{
+    padding: 10px 20px;
+    background-color: #007bff;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    color: white;
+}
+button:hover{
+    background-color: #0056b3;
+}
+.message{
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    max-width: 60%;
+    word-wrap: break-word;
+
+}
+.user{
+    align-self: flex-end;
+    margin-left: auto;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #007bff;
+}
+.bot{
+    align-self: flex-start;
+    margin-right: 0;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f1f1f1;
 }
