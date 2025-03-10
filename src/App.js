@@ -2,35 +2,28 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./App.css";
 
-// Add the correct integrity attribute for Bootstrap CSS
-const bootstrapCSS = document.createElement("link");
-bootstrapCSS.rel = "stylesheet";
-bootstrapCSS.href = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css";
-bootstrapCSS.integrity = "sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH";
-bootstrapCSS.crossOrigin = "anonymous";
-document.head.appendChild(bootstrapCSS);
+const apiKey = process.env.REACT_APP_OPENAI_KEY;
 
 function App() {
-    const [message, setMessage] = useState([]);
+    const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [loading, setIsLoading] = useState(false);
-
     const chatWindowRef = useRef(null);
 
-    useEffect(() => {
-        if (chatWindowRef.current) {
-            chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
-        }
-    }, [message]);
-
     const handleChange = async () => {
-        if (input.trim() === "") {
-            return;
-        }
+        if (input.trim() === "") return;
         setIsLoading(true);
+
+        setMessages((prevMessages) => [
+            ...prevMessages,
+            { text: input, sender: "user" }
+        ]);
+        console.log("API Key:", apiKey);
+
+
         try {
             const response = await axios.post(
-                "https://api.openai.com/v1/engines/davinci-codex/completions",
+                "https://api.openai.com/v1/chat/completions",
                 {
                     model: "gpt-3.5-turbo",
                     messages: [{ role: "user", content: input }]
@@ -38,21 +31,23 @@ function App() {
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": "Bearer YOUR_OPENAI_API_KEY"
+                        "Authorization": `Bearer ${apiKey}`
                     }
                 }
             );
+
             const botResponse = response.data.choices[0].message.content;
-            setMessage((prevMessage) => [
-                ...prevMessage,
-                { text: input, sender: "user" }
-            ]);
-            setMessage((prevMessage) => [
-                ...prevMessage,
+
+            setMessages((prevMessages) => [
+                ...prevMessages,
                 { text: botResponse, sender: "bot" }
             ]);
         } catch (error) {
             console.error("Error fetching bot response:", error);
+            setMessages((prevMessages) => [
+                ...prevMessages,
+                { text: "It's you, not us!", sender: "bot" }
+            ]);
         } finally {
             setIsLoading(false);
         }
@@ -78,12 +73,14 @@ function App() {
                 />
                 <button onClick={handleChange} className="btn btn-primary btn-sm">Send</button>
             </div>
-            <div className="messaging" ref={chatWindowRef}>
-                {message.map((message, index) => (
-                    <div key={index} className={`message ${message.sender}`}>
+            {loading && <p>Loading...</p>}
+            <div className="messaging">
+                {messages.map((message, index) => (
+                    <div key={index} className={message.sender}>
                         {message.text}
                     </div>
                 ))}
+                <div ref={chatWindowRef}></div>
             </div>
         </div>
     );
